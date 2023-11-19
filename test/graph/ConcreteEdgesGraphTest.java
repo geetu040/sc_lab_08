@@ -1,11 +1,12 @@
-/* Copyright (c) 2015-2016 MIT 6.005 course staff, all rights reserved.
- * Redistribution of original or derived work requires permission of course staff.
- */
 package graph;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Tests for ConcreteEdgesGraph.
@@ -16,30 +17,61 @@ import org.junit.Test;
  * Tests against the Graph spec should be in GraphInstanceTest.
  */
 public class ConcreteEdgesGraphTest extends GraphInstanceTest {
-    
+   
     /*
      * Provide a ConcreteEdgesGraph for tests in GraphInstanceTest.
      */
-    @Override public Graph<String> emptyInstance() {
-        return new ConcreteEdgesGraph();
+    @Override
+    public Graph<String> emptyInstance() {
+        return new Graph<String>(Collections.emptySet());
     }
-    
+
     /*
      * Testing ConcreteEdgesGraph...
      */
-    
-    // Testing strategy for ConcreteEdgesGraph.toString()
-    //   TODO
-    
-    // TODO tests for ConcreteEdgesGraph.toString()
-    
+
+
+    @Test
+    public void testConcreteEdgesGraphAdd() {
+        Graph<String> graph = emptyInstance();
+        assertTrue(graph.add("A"));
+        assertTrue(graph.add("B"));
+        assertFalse(graph.add("A")); // Adding the same vertex again should return false
+
+        Set<String> vertices = graph.vertices();
+        assertTrue(vertices.contains("A"));
+        assertTrue(vertices.contains("B"));
+        assertEquals(2, vertices.size());
+    }
+
+
+
+    @Test
+    public void testConcreteEdgesGraphRemove() {
+        Graph<String> graph = emptyInstance();
+        graph.add("A");
+        graph.add("B");
+        graph.set("A", "B", 5);
+
+        assertTrue(graph.remove("A"));
+
+        Set<String> vertices = graph.vertices();
+        assertFalse(vertices.contains("A"));
+        assertTrue(vertices.contains("B"));
+
+        Map<String, Integer> sources = graph.sources("B");
+        assertEquals(0, sources.size()); // The edge from A to B should be removed
+    }
+
     /*
      * Testing Edge...
      */
-    
-    // Testing strategy for Edge
-    //   TODO
-    
-    // TODO tests for operations of Edge
+
+    @Test
+    public void testEdgeToString() {
+        ConcreteEdgesGraph.Edge edge = new ConcreteEdgesGraph.Edge("A", "B", 5);
+        assertEquals("A -> B : 5", edge.toString());
+    }
+
     
 }
